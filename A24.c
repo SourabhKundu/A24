@@ -36,3 +36,56 @@ void input_data(struct que_data a[],int size,int loc)
     printf("%d %d",total_burst[loc],min_ar[loc]);
 
 }
+int time_quantum=4;
+int ptime,pcount,premain;
+int intime=1;
+void priority_process()
+{
+
+    printf("\n\npriority processs are running\n");
+    
+    printf("\n\nprocess no\t|before burst time\t|process remaining time\n"); 
+
+    while(total_burst[0]!=0)
+    {
+        int flag=0;
+        int prty=1000;
+        for(int i=0;i<n[0];i++)
+        {
+            if(intime>=que1[i].ar_time)
+            if(que1[i].priority<prty && que1[i].remain_time>0)
+            {
+                prty=que1[i].priority;
+                pcount=i;
+            }
+        }
+            printf("\npro%d\t\t %d\t\t",pcount+1,que1[pcount].remain_time);
+         
+            if(que1[pcount].remain_time<=time_quantum && que1[pcount].remain_time>0) 
+            { 
+                intime+=que1[pcount].remain_time; 
+                total_burst[0]-=que1[pcount].remain_time;
+                que1[pcount].remain_time=0; 
+                flag=1; 
+            } 
+            else if(que1[pcount].remain_time>0) 
+            { 
+                que1[pcount].remain_time-=time_quantum; 
+                total_burst[0]-=time_quantum;
+                
+                intime+=time_quantum; 
+            } 
+
+             printf("\t%d\n",que1[pcount].remain_time);
+
+            if(que1[pcount].remain_time==0 && flag==1) 
+            { 
+                printf("process %d terminated\n",pcount+1);
+            
+                flag=0; 
+            } 
+            
+       
+    }
+    
+}
